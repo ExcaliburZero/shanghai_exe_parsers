@@ -16,3 +16,5 @@ class TestMap(unittest.TestCase):
         self.assertEqual(2, map.grid.depth())
 
         self.assertEqual(9, len(map.battles))
+
+        self.assertEqual(3, len(map.battles[0].viruses))

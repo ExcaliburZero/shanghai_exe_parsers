@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import IO, List
+from typing import IO, List, Optional
 
 
 @dataclass
@@ -91,6 +91,77 @@ class Grid:
 
 @dataclass
 class Battle:
+    viruses: List["VirusEntry"]
+    panel_1: int
+    panel_2: int
+    type: int
+    count: bool
+    result: bool
+    escape: bool
+    gameover: bool
+    bgm: str
+    back: int
+
     @staticmethod
     def from_shd(line: str) -> "Battle":
-        pass
+        parts = line.split(":")
+
+        viruses = []
+
+        if len(parts) >= 20:
+            for i in range(0, 3):
+                j = 1 + i * 9
+
+                viruses.extend(
+                    [
+                        VirusEntry(
+                            int(parts[j]),
+                            int(parts[j + 1]),
+                            int(parts[j + 2]),
+                            int(parts[j + 3]),
+                            int(parts[j + 4]),
+                            int(parts[j + 5]),
+                            int(parts[j + 6]),
+                            int(parts[j + 7]),
+                            parts[j + 8] or None,
+                        )
+                    ]
+                )
+
+            panel_1 = int(parts[28])
+            panel_2 = int(parts[29])
+            type = int(parts[30])
+            count = parts[31] == "True"
+            result = parts[32] == "True"
+            escape = parts[33] == "True"
+            gameover = parts[34] == "True"
+            bgm = parts[35]
+            back = int(parts[36])
+        else:
+            raise NotImplementedError("Small battle entries not yet supported")
+
+        return Battle(
+            viruses=viruses,
+            panel_1=panel_1,
+            panel_2=panel_2,
+            type=type,
+            count=count,
+            result=result,
+            escape=escape,
+            gameover=gameover,
+            bgm=bgm,
+            back=back,
+        )
+
+
+@dataclass
+class VirusEntry:
+    virus_id: int
+    lank: int
+    x: int
+    y: int
+    chip_1: Optional[int]
+    chip_2: Optional[int]
+    chip_3: Optional[int]
+    hp: Optional[int]
+    name: Optional[str]
