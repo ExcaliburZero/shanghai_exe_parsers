@@ -5,12 +5,11 @@ from typing import IO, List
 @dataclass
 class Map:
     grid: "Grid"
+    battles: List["Battle"]
 
     @staticmethod
     def from_shd(input_stream: IO[str]) -> "Map":
         line = next(input_stream)
-
-        print(line)
 
         parts = line.split(",")
 
@@ -35,13 +34,35 @@ class Map:
 
         grid = Grid.from_shd(input_stream, int(x_len), int(y_len), int(z_len))
 
-        return Map(grid=grid)
+        battles = Map.__parse_battles(input_stream)
+
+        return Map(grid=grid, battles=battles)
+
+    @staticmethod
+    def __parse_battles(input_stream: IO[str]) -> List["Battle"]:
+        battles = []
+        line = next(input_stream).strip()
+        while line != "":
+            battles.append(Battle.from_shd(line))
+
+            line = next(input_stream).strip()
+
+        return battles
 
 
 @dataclass
 class Grid:
     # z, x, y
     tiles: List[List[List[int]]]
+
+    def width(self) -> int:
+        return len(self.tiles[0][0])
+
+    def height(self) -> int:
+        return len(self.tiles[0])
+
+    def depth(self) -> int:
+        return len(self.tiles)
 
     @staticmethod
     def from_shd(input_stream: IO[str], x_len: int, y_len: int, z_len: int) -> "Grid":
@@ -52,10 +73,8 @@ class Grid:
                 row = []
 
                 line = next(input_stream).strip()
-                while line == "":
-                    assert current_y == 0
-                    line = next(input_stream).strip()
 
+                assert line != ""
                 assert len(line.split(",")) == x_len
 
                 for tile in line.split(","):
@@ -64,4 +83,14 @@ class Grid:
                 floor.append(row)
             tiles.append(floor)
 
+            line = next(input_stream).strip()
+            assert line == ""
+
         return Grid(tiles)
+
+
+@dataclass
+class Battle:
+    @staticmethod
+    def from_shd(line: str) -> "Battle":
+        pass
