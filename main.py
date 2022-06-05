@@ -44,7 +44,7 @@ def run_map(map_shd: str, virus_ids_filepath: str) -> int:
     for i, b in enumerate(map.battles):
         print(f"\t{i}:")
         for virus in b.viruses:
-            print(f"\t\t{virus_ids[virus.virus_id]}")
+            print(f"\t\t{virus_ids[virus.virus_id]} {virus.level}")
 
     return SUCCESS
 

@@ -163,7 +163,7 @@ class Battle:
 @dataclass
 class VirusEntry:
     virus_id: int
-    lank: int
+    level: int
     x: int
     y: int
     chip_1: Optional[int]
