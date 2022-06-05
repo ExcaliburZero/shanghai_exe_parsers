@@ -1,5 +1,5 @@
-.PHONY = test
+.PHONY: test
 
 test:
-	python -m black --check *.py 
-	python -m mypy --strict *.py 
+	python -m black --check *.py **/*.py
+	python -m mypy --strict *.py **/*.py
