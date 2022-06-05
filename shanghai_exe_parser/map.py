@@ -1,6 +1,8 @@
 from dataclasses import dataclass
 from typing import IO, List, Optional
 
+NULL_VIRUS_ID = 0
+
 
 @dataclass
 class Map:
@@ -111,6 +113,10 @@ class Battle:
         if len(parts) >= 20:
             for i in range(0, 3):
                 j = 1 + i * 9
+
+                virus_id = int(parts[j])
+                if virus_id == NULL_VIRUS_ID:
+                    continue
 
                 viruses.extend(
                     [
